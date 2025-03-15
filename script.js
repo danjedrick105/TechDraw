@@ -84,7 +84,6 @@ function redrawCanvas() {
 
 canvas.addEventListener('pointerdown', (e) => {
     drawing = true;
-    e.stopPropagation();
     const { x, y } = getPosition(e);
     startX = x;
     startY = y;
