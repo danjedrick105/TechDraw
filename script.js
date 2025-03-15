@@ -25,13 +25,19 @@ let rulerMode = false;
 let eraserMode = false;
 let startX, startY, lastX, lastY;
 
-canvas.width = window.innerWidth * 0.8;
-canvas.height = window.innerHeight * 0.7;
+function resizeCanvas() {
+    canvas.width = window.innerWidth * 0.9;  // Adjust width for mobile
+    canvas.height = window.innerHeight * 0.7; // Adjust height for mobile
+    redrawCanvas(); // Redraw after resizing
+}
+
+window.addEventListener('resize', resizeCanvas);
+window.addEventListener('load', resizeCanvas);
 
 function getPosition(e) {
     const rect = canvas.getBoundingClientRect();
     let x, y;
-    if (e.touches) {
+    if (e.touches && e.touches.length > 0) {
         x = e.touches[0].clientX - rect.left;
         y = e.touches[0].clientY - rect.top;
     } else {
@@ -144,7 +150,10 @@ canvas.addEventListener('pointermove', (e) => {
 canvas.addEventListener('pointerup', (e) => {
     drawing = false;
     e.preventDefault();
-       ctx.globalCompositeOperation = 'source-over'; // Reset to normal drawing mode
+    ctx.globalCompositeOperation = 'source-over'; // Reset to normal drawing mode
+      
+       const { x, y } = getPosition(e);
+      
        if (eraserMode) {
         historyStack.push({
             type: 'eraser',
@@ -154,8 +163,6 @@ canvas.addEventListener('pointerup', (e) => {
         redoStack = [];
         return;
     }
-
-    const { x, y } = getPosition(e);
        // Save the drawn shape or freehand path
     if (shapeMode === 'rectangle') {
         historyStack.push({
@@ -188,6 +195,14 @@ canvas.addEventListener('pointerup', (e) => {
     }
 
     redrawCanvas(); 
+});
+
+document.addEventListener('touchmove', function (event) {
+    event.preventDefault(); // Stops scrolling
+}, { passive: false });
+
+document.addEventListener('gesturestart', function (event) {
+    event.preventDefault(); // Stops pinch-to-zoom
 });
 
 
