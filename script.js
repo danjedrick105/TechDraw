@@ -84,7 +84,7 @@ function redrawCanvas() {
 
 canvas.addEventListener('pointerdown', (e) => {
     drawing = true;
-    e.preventDefault();
+    e.stopPropagation();
     const { x, y } = getPosition(e);
     startX = x;
     startY = y;
@@ -96,7 +96,7 @@ canvas.addEventListener('pointerdown', (e) => {
 
 canvas.addEventListener('pointermove', (e) => {
     if (!drawing) return;
-    e.stopPropagation();
+     e.preventDefault();
     const { x, y } = getPosition(e);
 
     ctx.strokeStyle = color;
