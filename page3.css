@@ -1,29 +1,31 @@
+
 canvas {
   border: 1px solid #000;
   cursor: crosshair;
   margin: auto;
-  margin-bottom: 40px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 40px;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   background-color: #ffffff;
+  border: 3px solid #000000;
   touch-action: none; 
   user-select: none; 
-  display: block;
 } 
 
 .controls {
   text-align: center;
+  align-items: center;
   margin: 50px;
   padding: 0;
   gap: 10px;
- margin-top: 50px;
- margin-bottom: 50px;
+  margin-top: 50px;
+  margin-bottom: 50px;
   display: flex;
- flex-wrap: wrap;
- touch-action: none; 
- user-select: none; 
- display: block;
+  flex-wrap: wrap;
+  touch-action: none; 
+  user-select: none; 
 }
 
 button, input [type="color"] {
@@ -33,15 +35,20 @@ button, input [type="color"] {
   cursor: pointer;
   color: rgb(0, 0, 0);
   border: none;
-  border-radius: 5px;
-  transition: background-color 0.3s;
+  border-radius: 7px;
+  transition: background-color 0.5s;
   touch-action: none; 
   user-select: none; 
 } 
 
+.active {
+  background-color: #a1a1a1;
+  border: 1px solid #000000;
+}
+
 #content {
 width: 40px;
-height: 150;
+height: 150px;
 border: 1px solid #000;
 margin-bottom: 10px;
 }
@@ -50,12 +57,4 @@ button:hover,input[type="color"]:hover {
 background-color: #fa7b7b;
 }
 
-.ruler {
-  width: 80px;
-  margin: 0 10px;
-  background-color: #ffffff;
-  border: none;
-  padding: 10px;
-  text-align: center;
-}
 
