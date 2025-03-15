@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechDraw|Try It Yourself</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="page3.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <div class="dropdowm_menu"></div>
+                <h4 class="logo">Tech</h4>
+                <div class="logo">🖋️Draw</div>
+
+                <li><a href="page2.html">Tutorial<i class="fas fa-caret-down"></i> </a></li>
+                <li><a href="index.html">Home </a></li>
+                </ul>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>    
+    <canvas id="drawingCanvas" width="800" height="500"></canvas>
+    
+    <section id="home">
+        <div class="controls">
+        <button id="eraserButton">Eraser</button>
+        <button id="clearButton"> Clear </button>
+        <button id="undoButton"> Undo </button>
+        <button id="redoButton"> Redo </button>
+        <input type="text" id="filenameInput" placeholder="Enter filename" />
+        <button id="saveButton">Save</button>
+        <input type="color" id="colorPicker" value="#000000">
+        <select id="shapeSelector">
+            <option value="freehand">Freehand</option>
+            <option value="rectangle">Rectangle</option>
+            <option value="circle">Circle</option>
+            <option value="line">Line</option>
+        </select>
+        <button id="rulerButton" class="ruler">Ruler</button>
+        <label for="penSize">Pen Size:</label>
+        <input type="range" id="penSize" min="1" max="20" value="5">
+        <span id="penSizeValue">5</span>
+       </div>
+       </section>
+      </main>
+
+        <script src="script.js"></script>
+
+        <footer>
+            <marquee behavior="" direction="right">Copyright TechDraw 2025. All right reserved.</marquee>
+        </footer>
+      </body>
+      </html>

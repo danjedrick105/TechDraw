@@ -1,0 +1,55 @@
+canvas {
+  border: 1px solid #000;
+  cursor: crosshair;
+  margin: auto;
+  margin-top: 40px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #ffffff;
+  touch-action: none; 
+  user-select: none; 
+  display: block;
+} 
+
+.controls {
+  text-align: center;
+  margin: 50px;
+  padding: 0;
+  gap: 10px;
+ margin-top: 100px;
+ margin-bottom: 50px;
+ flex-wrap: wrap;
+}
+
+button, input [type="color"] {
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+} 
+
+#content {
+width: 40px;
+height: 150;
+border: 1px solid #000;
+margin-bottom: 10px;
+}
+
+button:hover,input[type="color"]:hover {
+background-color: #fa7b7b;
+}
+
+.ruler {
+  width: 80px;
+  margin: 0 10px;
+  background-color: #ffffff;
+  border: none;
+  padding: 10px;
+  text-align: center;
+}
+

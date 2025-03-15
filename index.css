@@ -1,0 +1,123 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+section {
+    background-color: #ffffff1e;
+    max-width: 85%;
+    margin: auto;
+    padding: 5%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+section img {
+    align-content: center;
+    width: 100px;
+    height: 100px;
+    clip-path: circle(50%);
+}
+
+.center-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.gallery {
+    display: grid;
+    padding: 17px;
+}
+
+.grid-container {
+    padding: 5%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+  
+  .grid-item {
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 5px;
+  }
+
+  .grid-item p {
+    font-size: 20px;
+    color: #000000;
+  }
+
+  .grid-item:hover {
+    background-color: #9b3030;
+    transition: background-color 0.4s ease;
+  }
+  .grid-item:hover p {
+    color: #ffffff;
+    transition: color 0.4s ease;
+  }
+
+  .trivia h1, h3 {
+    font-size: 1.5rem; /* Instead of 30px */
+    padding-left: 10%;
+    padding-right: 10%;
+}
+.uniqueness h1,h3{
+    color: #050505d7;
+    font-size: 1.5rem; /* Instead of 30px */
+    padding-left: 10%;
+    padding-right: 10%;
+}
+.about h1,h3{
+    color: #050505d7;
+    font-size: 1.5rem; /* Instead of 30px */
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+h2 {
+    color: #ffffff;
+    font-size: 1.5rem; /* Instead of 30px */
+    padding-left: 10%;
+    padding-right: 10%;
+    text-align: center;
+}
+
+.trivia p {
+    color: #ffffff;
+    font-size: 1.5rem; /* Instead of 30px */
+    padding-left: 10%;
+    padding-right: 10%;
+}
+.uniqueness p {
+    color: #ffffff;
+    font-size: 1.5rem; /* Instead of 30px */
+    padding-left: 10%;
+    padding-right: 10%;
+}
+.about p {
+    color: #ffffff;
+    font-size: 1.5rem; /* Instead of 30px */
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+@media (max-width: 447px) {
+    .trivia h1, h3, .uniqueness h1, h3, .about h1, h3 {
+        padding-left: 3%;
+        padding-right: 3%;
+    }
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .trivia h1, h3, .uniqueness h1, h3, .about h1, h3 {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
+}
