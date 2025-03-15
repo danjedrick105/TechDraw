@@ -2,7 +2,7 @@ canvas {
   border: 1px solid #000;
   cursor: crosshair;
   margin: auto;
-  margin-top: 40px;
+  margin-bottom: 40px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-wrap: wrap;
@@ -17,9 +17,13 @@ canvas {
   margin: 50px;
   padding: 0;
   gap: 10px;
- margin-top: 100px;
+ margin-top: 50px;
  margin-bottom: 50px;
+  display: flex;
  flex-wrap: wrap;
+ touch-action: none; 
+ user-select: none; 
+ display: block;
 }
 
 button, input [type="color"] {
@@ -31,6 +35,8 @@ button, input [type="color"] {
   border: none;
   border-radius: 5px;
   transition: background-color 0.3s;
+  touch-action: none; 
+  user-select: none; 
 } 
 
 #content {

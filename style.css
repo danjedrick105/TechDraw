@@ -30,13 +30,13 @@ nav ul {
 nav li {
     float: right;
     display: inline-block;
-    margin-right: 20px;
+    margin-right: 1.25rem;
 }
 
 nav a {
     color: #ffffff;
     text-decoration: none;
-    font-size: 20px;
+    font-size: 1.25rem;
 }
 
 footer {
@@ -67,11 +67,17 @@ footer {
         padding-left: 1%;
         padding-right: 1%;
     }
+    .nav_li {
+        padding: 1.25rem;
+    }
 }
 
 @media (max-width: 768px) {
     body {
         padding-left: 4%;
         padding-right: 4%;
+    }
+    .nav_li {
+        padding: 1.25rem;
     }
 }

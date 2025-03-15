@@ -4,7 +4,7 @@ const canvas = document.getElementById('drawingCanvas');
 const ctx = canvas.getContext('2d');
 const clearButton = document.getElementById('clearButton');
 const undoButton = document.getElementById('undoButton');
-const redoButton = document.getElementById('redoButton');   
+const redoButton = document.getElementById('redoButton');
 const saveButton = document.getElementById('saveButton');
 const filenameInput = document.getElementById('filenameInput');
 const colorPicker = document.getElementById('colorPicker');
@@ -13,7 +13,6 @@ const rulerButton = document.getElementById('rulerButton');
 const eraserButton = document.getElementById('eraserButton');
 const penSizeSlider = document.getElementById('penSize');
 const penSizeValue = document.getElementById('penSizeValue');
-
 
 let drawing = false;
 let currentPath = [];
@@ -26,46 +25,35 @@ let eraserMode = false;
 let startX, startY, lastX, lastY;
 
 function resizeCanvas() {
-    canvas.width = window.innerWidth * 0.9;  // Adjust width for mobile
-    canvas.height = window.innerHeight * 0.7; // Adjust height for mobile
-    redrawCanvas(); // Redraw after resizing
-}
+    const prevImage = canvas.toDataURL();
+    canvas.width = window.innerWidth * 0.9;
+    canvas.height = window.innerHeight * 0.7;
 
-window.addEventListener('resize', resizeCanvas);
-window.addEventListener('load', resizeCanvas);
+    const img = new Image();
+    img.onload = () => ctx.drawImage(img, 0, 0);
+    img.src = prevImage;
+
+    redrawCanvas();
+}
 
 function getPosition(e) {
     const rect = canvas.getBoundingClientRect();
-    let x, y;
+    let x = e.clientX - rect.left;
+    let y = e.clientY - rect.top;
     if (e.touches && e.touches.length > 0) {
         x = e.touches[0].clientX - rect.left;
         y = e.touches[0].clientY - rect.top;
-    } else {
-        x = e.clientX - rect.left;
-        y = e.clientY - rect.top;
     }
     return { x, y };
 }
 
-function setCanvasBackground(color) {
-    ctx.fillStyle = color;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = color; // Reset for future drawings
-    ctx.globalCompositeOperation = 'source-over'; // Ensures normal drawing
-    redrawCanvas(); // 🚀 Force re-render
-}
-
-window.onload = () => setCanvasBackground('#ffffff');
-
 function redrawCanvas() {
-    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-    const draw = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
     historyStack.forEach(item => {
         ctx.strokeStyle = item.color;
         ctx.lineWidth = item.size;
         ctx.beginPath();
+
         if (item.type === 'freehand' || item.type === 'eraser') {
             ctx.globalCompositeOperation = item.type === 'eraser' ? 'destination-out' : 'source-over';
             ctx.moveTo(item.path[0].x, item.path[0].y);
@@ -76,22 +64,19 @@ function redrawCanvas() {
         } else if (item.type === 'circle') {
             ctx.globalCompositeOperation = 'source-over';
             ctx.arc(item.startX, item.startY, item.radius, 0, Math.PI * 2);
+            ctx.stroke();
         } else if (item.type === 'line') {
             ctx.globalCompositeOperation = 'source-over';
             ctx.moveTo(item.startX, item.startY);
             ctx.lineTo(item.endX, item.endY);
+            ctx.stroke();
         }
+
         ctx.stroke();
     });
-    ctx.globalCompositeOperation = 'source-over';
-};
-if (isMobile) {
-    requestAnimationFrame(draw);
-} else {
-    draw(); // Runs normally on computers
-}
-}
 
+    ctx.globalCompositeOperation = 'source-over';
+}
 
 canvas.addEventListener('pointerdown', (e) => {
     drawing = true;
@@ -107,18 +92,18 @@ canvas.addEventListener('pointerdown', (e) => {
 
 canvas.addEventListener('pointermove', (e) => {
     if (!drawing) return;
+    e.stopPropagation();
     e.preventDefault();
     const { x, y } = getPosition(e);
 
     ctx.strokeStyle = color;
     ctx.lineWidth = penSizeSlider.value;
 
-   if (eraserMode) {
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.lineTo(x, y);
-    ctx.stroke();
-    currentPath.push({ x, y });
-
+    if (eraserMode) {
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        currentPath.push({ x, y });
     } else if (rulerMode && shapeMode === 'freehand') {
         ctx.globalCompositeOperation = 'source-over';
         ctx.lineTo(x, y);
@@ -137,11 +122,12 @@ canvas.addEventListener('pointermove', (e) => {
             ctx.strokeRect(startX, startY, x - startX, y - startY);
         } else if (shapeMode === 'circle') {
             ctx.arc(startX, startY, Math.hypot(x - startX, y - startY), 0, Math.PI * 2);
+            ctx.stroke();
         } else if (shapeMode === 'line') {
             ctx.moveTo(startX, startY);
             ctx.lineTo(x, y);
+            ctx.stroke();
         }
-        ctx.stroke();
     }
     lastX = x;
     lastY = y;
@@ -150,11 +136,9 @@ canvas.addEventListener('pointermove', (e) => {
 canvas.addEventListener('pointerup', (e) => {
     drawing = false;
     e.preventDefault();
-    ctx.globalCompositeOperation = 'source-over'; // Reset to normal drawing mode
-      
-       const { x, y } = getPosition(e);
-      
-       if (eraserMode) {
+    ctx.globalCompositeOperation = 'source-over';
+
+    if (eraserMode) {
         historyStack.push({
             type: 'eraser',
             path: currentPath,
@@ -163,7 +147,7 @@ canvas.addEventListener('pointerup', (e) => {
         redoStack = [];
         return;
     }
-       // Save the drawn shape or freehand path
+
     if (shapeMode === 'rectangle') {
         historyStack.push({
             type: 'rectangle',
@@ -173,10 +157,10 @@ canvas.addEventListener('pointerup', (e) => {
             color, size: penSizeSlider.value
         });
     } else if (shapeMode === 'circle') {
-        const radius = Math.hypot(lastX - startX, lastY - startY);
         historyStack.push({
             type: 'circle',
-            startX, startY, radius,
+            startX, startY,
+            radius: Math.hypot(lastX - startX, lastY - startY),
             color, size: penSizeSlider.value
         });
     } else if (shapeMode === 'line') {
@@ -186,7 +170,7 @@ canvas.addEventListener('pointerup', (e) => {
             endX: lastX, endY: lastY,
             color, size: penSizeSlider.value
         });
-    } else { 
+    } else {
         historyStack.push({
             type: 'freehand',
             path: currentPath,
@@ -194,17 +178,8 @@ canvas.addEventListener('pointerup', (e) => {
         });
     }
 
-    redrawCanvas(); 
+    redrawCanvas();
 });
-
-document.addEventListener('touchmove', function (event) {
-    event.preventDefault(); // Stops scrolling
-}, { passive: false });
-
-document.addEventListener('gesturestart', function (event) {
-    event.preventDefault(); // Stops pinch-to-zoom
-});
-
 
 undoButton.addEventListener('click', () => {
     if (historyStack.length > 0) {
@@ -215,56 +190,19 @@ undoButton.addEventListener('click', () => {
 
 redoButton.addEventListener('click', () => {
     if (redoStack.length > 0) {
-        historyStack.push(redoStack.pop()); 
+        historyStack.push(redoStack.pop());
         redrawCanvas();
     }
 });
 
-saveButton.addEventListener('click', () => {
-    const tempCanvas = document.createElement('canvas');
-    const tempCtx = tempCanvas.getContext('2d');
-
-    tempCanvas.width = canvas.width;
-    tempCanvas.height = canvas.height;
-
-    tempCtx.fillStyle = '#ffffff'; 
-    tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-
-    tempCtx.drawImage(canvas, 0, 0);
-
-    const link = document.createElement('a');
-    link.href = tempCanvas.toDataURL('image/png'); 
-    link.download = (filenameInput.value.trim() || 'sketch') + '.png';
-    link.click();
-});
-
 clearButton.addEventListener('click', () => {
-    setCanvasBackground('#ffffff'); 
     historyStack = [];
     redoStack = [];
-    redrawCanvas(); 
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 });
 
-colorPicker.addEventListener('input', (e) => {
-    color = e.target.value;
-    ctx.strokeStyle = color; // Apply color immediately
-});
-
-shapeSelector.addEventListener('change', (e) => {
-    shapeMode = e.target.value;
-});
-
-rulerButton.addEventListener('click', () => {
-    rulerMode = !rulerMode;
-    rulerButton.style.backgroundColor = rulerMode ? '#ff7f00' : '#4CAF50';
-});
-
-eraserButton.addEventListener('click', () => {
-    eraserMode = !eraserMode;
-    eraserButton.style.backgroundColor = eraserMode ? '#ff0000' : '#4CAF50';
-});
-
-penSizeSlider.addEventListener('input', (e) => {
-    penSizeValue.textContent = e.target.value;
-    ctx.lineWidth = e.target.value;
-});
+colorPicker.addEventListener('input', (e) => color = e.target.value);
+shapeSelector.addEventListener('change', (e) => shapeMode = e.target.value);
+rulerButton.addEventListener('click', () => rulerMode = !rulerMode);
+eraserButton.addEventListener('click', () => eraserMode = !eraserMode);
+penSizeSlider.addEventListener('input', (e) => penSizeValue.textContent = e.target.value);
