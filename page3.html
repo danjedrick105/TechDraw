@@ -22,8 +22,8 @@
         </nav>
     </header>
     
-    <main>    
-    
+    <main>     
+        <canvas id="drawingCanvas" width="800" height="600"> </canvas>
     <section id="home">
         <div class="controls">
         <button id="eraserButton">Eraser</button>
@@ -39,13 +39,10 @@
             <option value="circle">Circle</option>
             <option value="line">Line</option>
         </select>
-        <button id="rulerButton" class="ruler">Ruler</button>
         <label for="penSize">Pen Size:</label>
         <input type="range" id="penSize" min="1" max="20" value="5">
         <span id="penSizeValue">5</span>
        </div>
-
-       <canvas id="drawingCanvas" width="800" height="500"></canvas>
        </section>
       </main>
 
