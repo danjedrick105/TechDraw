@@ -1,15 +1,14 @@
 
+
 canvas {
-  border: 1px solid #000;
   cursor: crosshair;
   margin: auto;
-  margin-top: 40px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: black solid 3px;
   background-color: #ffffff;
-  border: 3px solid #000000;
   touch-action: none; 
   user-select: none; 
 } 
@@ -17,7 +16,7 @@ canvas {
 .controls {
   text-align: center;
   align-items: center;
-  margin: 50px;
+  margin: auto;
   padding: 0;
   gap: 10px;
   margin-top: 50px;
@@ -56,5 +55,6 @@ margin-bottom: 10px;
 button:hover,input[type="color"]:hover {
 background-color: #fa7b7b;
 }
+
 
 
