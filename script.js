@@ -52,7 +52,7 @@ window.onload = () => setCanvasBackground('#ffffff');
 function redrawCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     historyStack.forEach(item => {
-        ctx.strokeStyle = item.color;
+        ctx.strokeStyle = item.color ||'#000';
         ctx.lineWidth = item.size;
         ctx.beginPath();
         if (item.type === 'freehand' || item.type === 'eraser') {
@@ -144,7 +144,7 @@ canvas.addEventListener('pointerup', (e) => {
     }
 
     const { x, y } = getPosition(e);
-       // Save the drawn shape or freehand path
+       
     if (shapeMode === 'rectangle') {
         historyStack.push({
             type: 'rectangle',
@@ -174,7 +174,8 @@ canvas.addEventListener('pointerup', (e) => {
             color, size: penSizeSlider.value
         });
     }
-
+    
+    requestAnimationFrame(redrawCanvas);
     redrawCanvas(); 
 });
 
@@ -220,6 +221,7 @@ clearButton.addEventListener('click', () => {
 
 colorPicker.addEventListener('input', (e) => {
     color = e.target.value;
+    ctx.strokeStyle = color;
 });
 
 shapeSelector.addEventListener('change', (e) => {
