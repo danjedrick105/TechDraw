@@ -17,8 +17,12 @@ header {
 }
 
 .logo {
-    font-size: 25px;
+    font-size: 1.25rem;
     font-weight: bold;
+    text-transform: uppercase ;
+    margin: -18px;
+    padding: 15px;
+    float: left;
 }
 
 nav ul {
@@ -46,12 +50,6 @@ footer {
     text-align: center;
     clear: both;
 }
-.logo {
-    text-transform: uppercase ;
-    margin: -18px;
-    padding: 15px;
-    float: left;
-}
 
 .container {
     width: 80%;
@@ -60,24 +58,52 @@ footer {
     display: flex;
     flex-wrap: wrap;     
 }
-  
 
-@media (max-width: 447px) {
-    body {
+@media (max-width: 360px) {
+    .section {
+        padding-left: 0.5%;
+        padding-right: 0.5%;
+    }
+    .header {
+        padding: 0.5rem;
+    }
+    .header, .logo {
+        size: 0.5rem;
+    }
+    .header, .nav_a {
+        size: 0.5rem;
+        padding: 0.4rem 0.1rem 0.4rem 0.1rem;
+    }
+}
+
+@media (max-width: 446px) {
+    .section {
         padding-left: 1%;
         padding-right: 1%;
     }
-    .nav_li {
-        padding: 1.25rem;
+    .header {
+        padding: 1rem;
+    }
+    .header, .logo {
+        size: 1rem;
+    }
+    .header, .nav_a {
+        size: 1rem;
+        padding: 0.6rem 0.3rem 0.6rem 0.2rem;
     }
 }
 
 @media (max-width: 768px) {
-    body {
+    .section {
         padding-left: 4%;
         padding-right: 4%;
     }
-    .nav_li {
-        padding: 1.25rem;
+    .header, .nav_a {
+        size: 1.25rem;
+    }
+    .header, .logo {
+        size: 1.25rem;
+        padding: 0.7rem 0.4rem 0.7rem 0.3rem;
     }
 }
+
