@@ -80,7 +80,6 @@ function redrawCanvas() {
 
 canvas.addEventListener('pointerdown', (e) => {
     drawing = true;
-    e.preventDefault();
     const { x, y } = getPosition(e);
     startX = x;
     startY = y;
@@ -135,7 +134,6 @@ canvas.addEventListener('pointermove', (e) => {
 
 canvas.addEventListener('pointerup', (e) => {
     drawing = false;
-    e.preventDefault();
     ctx.globalCompositeOperation = 'source-over';
 
     if (eraserMode) {
