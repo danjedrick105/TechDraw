@@ -95,7 +95,6 @@ canvas.addEventListener('pointerdown', (e) => {
 
 canvas.addEventListener('pointermove', (e) => {
     if (!drawing) return;
-     e.preventDefault();
     const { x, y } = getPosition(e);
 
     ctx.strokeStyle = color;
