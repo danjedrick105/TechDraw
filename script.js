@@ -43,16 +43,21 @@ function getPosition(e) {
 
 function setCanvasBackground(color) {
     ctx.fillStyle = color;
-    ctx.fillRect(0, 0, canvas.width, canvas.height); // Fills entire canvas
-    ctx.fillStyle = color; // Reset fill color for future drawings
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = color; // Reset for future drawings
+    ctx.globalCompositeOperation = 'source-over'; // Ensures normal drawing
+    redrawCanvas(); // 🚀 Force re-render
 }
 
 window.onload = () => setCanvasBackground('#ffffff');
 
 function redrawCanvas() {
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    const draw = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
     historyStack.forEach(item => {
-        ctx.strokeStyle = item.color ||'#000';
+        ctx.strokeStyle = item.color;
         ctx.lineWidth = item.size;
         ctx.beginPath();
         if (item.type === 'freehand' || item.type === 'eraser') {
@@ -73,7 +78,14 @@ function redrawCanvas() {
         ctx.stroke();
     });
     ctx.globalCompositeOperation = 'source-over';
+};
+if (isMobile) {
+    requestAnimationFrame(draw);
+} else {
+    draw(); // Runs normally on computers
 }
+}
+
 
 canvas.addEventListener('pointerdown', (e) => {
     drawing = true;
@@ -144,7 +156,7 @@ canvas.addEventListener('pointerup', (e) => {
     }
 
     const { x, y } = getPosition(e);
-       
+       // Save the drawn shape or freehand path
     if (shapeMode === 'rectangle') {
         historyStack.push({
             type: 'rectangle',
@@ -174,8 +186,7 @@ canvas.addEventListener('pointerup', (e) => {
             color, size: penSizeSlider.value
         });
     }
-    
-    requestAnimationFrame(redrawCanvas);
+
     redrawCanvas(); 
 });
 
@@ -221,7 +232,7 @@ clearButton.addEventListener('click', () => {
 
 colorPicker.addEventListener('input', (e) => {
     color = e.target.value;
-    ctx.strokeStyle = color;
+    ctx.strokeStyle = color; // Apply color immediately
 });
 
 shapeSelector.addEventListener('change', (e) => {
