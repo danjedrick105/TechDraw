@@ -9,7 +9,6 @@ const saveButton = document.getElementById('saveButton');
 const filenameInput = document.getElementById('filenameInput');
 const colorPicker = document.getElementById('colorPicker');
 const shapeSelector = document.getElementById('shapeSelector');
-const rulerButton = document.getElementById('rulerButton');
 const eraserButton = document.getElementById('eraserButton');
 const penSizeSlider = document.getElementById('penSize');
 const penSizeValue = document.getElementById('penSizeValue');
@@ -20,21 +19,26 @@ let historyStack = [];
 let redoStack = [];
 let color = '#000000';
 let shapeMode = 'freehand';
-let rulerMode = false;
 let eraserMode = false;
 let startX, startY, lastX, lastY;
 
 function resizeCanvas() {
-    const prevImage = canvas.toDataURL();
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = canvas.width;
+    tempCanvas.height = canvas.height;
+    const tempCtx = tempCanvas.getContext('2d');
+    tempCtx.drawImage(canvas, 0, 0);
+
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+
     canvas.width = window.innerWidth * 0.9;
     canvas.height = window.innerHeight * 0.7;
 
-    const img = new Image();
-    img.onload = () => ctx.drawImage(img, 0, 0);
-    img.src = prevImage;
-
+    ctx.drawImage(tempCanvas, 0, 0);
     redrawCanvas();
 }
+
 
 function getPosition(e) {
     const rect = canvas.getBoundingClientRect();
@@ -103,11 +107,6 @@ canvas.addEventListener('pointermove', (e) => {
         ctx.lineTo(x, y);
         ctx.stroke();
         currentPath.push({ x, y });
-    } else if (rulerMode && shapeMode === 'freehand') {
-        ctx.globalCompositeOperation = 'source-over';
-        ctx.lineTo(x, y);
-        ctx.stroke();
-        currentPath.push({ x, y });
     } else if (shapeMode === 'freehand') {
         ctx.globalCompositeOperation = 'source-over';
         ctx.lineTo(x, y);
@@ -119,6 +118,7 @@ canvas.addEventListener('pointermove', (e) => {
         ctx.beginPath();
         if (shapeMode === 'rectangle') {
             ctx.strokeRect(startX, startY, x - startX, y - startY);
+            ctx.beginPath();
         } else if (shapeMode === 'circle') {
             ctx.arc(startX, startY, Math.hypot(x - startX, y - startY), 0, Math.PI * 2);
             ctx.stroke();
@@ -201,6 +201,17 @@ clearButton.addEventListener('click', () => {
 
 colorPicker.addEventListener('input', (e) => color = e.target.value);
 shapeSelector.addEventListener('change', (e) => shapeMode = e.target.value);
-rulerButton.addEventListener('click', () => rulerMode = !rulerMode);
-eraserButton.addEventListener('click', () => eraserMode = !eraserMode);
+
+eraserButton.addEventListener('click', () => {
+    eraserMode = !eraserMode;
+    eraserButton.classList.toggle('active', eraserMode);
+});
 penSizeSlider.addEventListener('input', (e) => penSizeValue.textContent = e.target.value);
+
+saveButton.addEventListener('click', () => {
+    const filename = filenameInput.value || 'drawing';
+    const link = document.createElement('a');
+    link.download = `${filename}.png`;
+    link.href = canvas.toDataURL();
+    link.click();
+});
