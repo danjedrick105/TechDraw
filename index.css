@@ -102,6 +102,15 @@ h2 {
     padding-right: 10%;
 }
 
+@media (max-width: 446px) {
+    .trivia h1, h3, .uniqueness h1, h3, .about h1, h3 {
+        padding-left: 1.5%;
+        padding-right: 1.5%;
+    }
+    .grid-container {
+        grid-template-columns: 0.5fr;
+    }
+}
 @media (max-width: 447px) {
     .trivia h1, h3, .uniqueness h1, h3, .about h1, h3 {
         padding-left: 3%;
