@@ -90,8 +90,11 @@ function redrawCanvas() {
     ctx.globalCompositeOperation = 'source-over';
 }
 
-canvas.addEventListener('pointerdown', (e) => {
+canvas.addEventListener("pointerdown", (e) => {
     drawing = true;
+    e.preventDefault();  // Stop scrolling
+    e.stopPropagation(); // Stop event from bubbling
+
     const { x, y } = getPosition(e);
     startX = x;
     startY = y;
@@ -101,36 +104,35 @@ canvas.addEventListener('pointerdown', (e) => {
     redoStack = [];
 });
 
-canvas.addEventListener('pointermove', (e) => {
+canvas.addEventListener("pointermove", (e) => {
     if (!drawing) return;
     e.preventDefault();
     e.stopPropagation();
-    const { x, y } = getPosition(e);
 
+    const { x, y } = getPosition(e);
     ctx.strokeStyle = color;
     ctx.lineWidth = penSizeSlider.value;
 
     if (eraserMode) {
-        ctx.globalCompositeOperation = 'destination-out';
+        ctx.globalCompositeOperation = "destination-out";
         ctx.lineTo(x, y);
         ctx.stroke();
         currentPath.push({ x, y });
-    } else if (shapeMode === 'freehand') {
-        ctx.globalCompositeOperation = 'source-over';
+    } else if (shapeMode === "freehand") {
+        ctx.globalCompositeOperation = "source-over";
         ctx.lineTo(x, y);
         ctx.stroke();
         currentPath.push({ x, y });
     } else {
         redrawCanvas();
-        ctx.globalCompositeOperation = 'source-over';
+        ctx.globalCompositeOperation = "source-over";
         ctx.beginPath();
-        if (shapeMode === 'rectangle') {
+        if (shapeMode === "rectangle") {
             ctx.strokeRect(startX, startY, x - startX, y - startY);
-            ctx.beginPath();
-        } else if (shapeMode === 'circle') {
+        } else if (shapeMode === "circle") {
             ctx.arc(startX, startY, Math.hypot(x - startX, y - startY), 0, Math.PI * 2);
             ctx.stroke();
-        } else if (shapeMode === 'line') {
+        } else if (shapeMode === "line") {
             ctx.moveTo(startX, startY);
             ctx.lineTo(x, y);
             ctx.stroke();
@@ -138,56 +140,33 @@ canvas.addEventListener('pointermove', (e) => {
     }
     lastX = x;
     lastY = y;
-}, {passive:false});
+}, { passive: false });
 
-
-
-canvas.addEventListener('pointerup', (e) => {
+canvas.addEventListener("pointerup", (e) => {
     drawing = false;
-    ctx.globalCompositeOperation = 'source-over';
+    e.preventDefault();
+    e.stopPropagation();
+
+    ctx.globalCompositeOperation = "source-over";
 
     if (eraserMode) {
-        historyStack.push({
-            type: 'eraser',
-            path: currentPath,
-            size: penSizeSlider.value,
-        });
+        historyStack.push({ type: "eraser", path: currentPath, size: penSizeSlider.value });
         redoStack = [];
         return;
     }
 
-    if (shapeMode === 'rectangle') {
-        historyStack.push({
-            type: 'rectangle',
-            startX, startY,
-            width: lastX - startX,
-            height: lastY - startY,
-            color, size: penSizeSlider.value
-        });
-    } else if (shapeMode === 'circle') {
-        historyStack.push({
-            type: 'circle',
-            startX, startY,
-            radius: Math.hypot(lastX - startX, lastY - startY),
-            color, size: penSizeSlider.value
-        });
-    } else if (shapeMode === 'line') {
-        historyStack.push({
-            type: 'line',
-            startX, startY,
-            endX: lastX, endY: lastY,
-            color, size: penSizeSlider.value
-        });
+    if (shapeMode === "rectangle") {
+        historyStack.push({ type: "rectangle", startX, startY, width: lastX - startX, height: lastY - startY, color, size: penSizeSlider.value });
+    } else if (shapeMode === "circle") {
+        historyStack.push({ type: "circle", startX, startY, radius: Math.hypot(lastX - startX, lastY - startY), color, size: penSizeSlider.value });
+    } else if (shapeMode === "line") {
+        historyStack.push({ type: "line", startX, startY, endX: lastX, endY: lastY, color, size: penSizeSlider.value });
     } else {
-        historyStack.push({
-            type: 'freehand',
-            path: currentPath,
-            color, size: penSizeSlider.value
-        });
+        historyStack.push({ type: "freehand", path: currentPath, color, size: penSizeSlider.value });
     }
 
     redrawCanvas();
-});
+}, { passive: false });
 
 undoButton.addEventListener('click', () => {
     if (historyStack.length > 0) {
