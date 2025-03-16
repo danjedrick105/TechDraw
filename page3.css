@@ -26,6 +26,7 @@ canvas {
   user-select: none; 
 }
 
+  
 button, input [type="color"] {
   margin-top: 10px;
   padding: 10px;
@@ -51,7 +52,7 @@ margin-bottom: 10px;
 }
 
 button:hover,input[type="color"]:hover {
-background-color: #fa7b7b;
+background-color: #818181;
 }
 
 @media (max-width: 360px) {
@@ -75,5 +76,4 @@ html, body {
       touch-action: auto;
   }
 }
-
 
