@@ -1,15 +1,10 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    font-family: Arial, sans-serif;
-}
-
 section {
     background-color: #ffffff1e;
     max-width: 85%;
     margin: auto;
     padding: 5%;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    touch-action: auto;
 }
 
 section img {
@@ -102,7 +97,10 @@ h2 {
     padding-right: 10%;
 }
 
-@media (max-width: 446px) {
+@media (max-width: 360px) {
+    html, body {
+        height: 100vh;
+      }
     .trivia h1, h3, .uniqueness h1, h3, .about h1, h3 {
         padding-left: 1.5%;
         padding-right: 1.5%;
@@ -111,7 +109,10 @@ h2 {
         grid-template-columns: 0.5fr;
     }
 }
-@media (max-width: 447px) {
+@media (max-width: 446px) {
+    html, body {
+        height: 100vh;
+      }
     .trivia h1, h3, .uniqueness h1, h3, .about h1, h3 {
         padding-left: 3%;
         padding-right: 3%;
@@ -122,11 +123,14 @@ h2 {
 }
 
 @media (max-width: 768px) {
+    html, body {
+        height: 100vh;
+      }
     .trivia h1, h3, .uniqueness h1, h3, .about h1, h3 {
         padding-left: 5%;
         padding-right: 5%;
     }
     .grid-container {
         grid-template-columns: 1fr;
-    }
+    } 
 }
