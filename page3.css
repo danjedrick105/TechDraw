@@ -5,8 +5,9 @@ canvas {
   height: auto;
   border: black solid 3px;
   background-color: #ffffff;
-  touch-action: auto; 
+  touch-action: none;
   user-select: none; 
+  cursor: crosshair;
 }
 
 .controls {
@@ -52,5 +53,26 @@ button:hover,input[type="color"]:hover {
 background-color: #fa7b7b;
 }
 
+@media (max-width: 360px) {
+html, body {
+  height: 100vh;
+  overflow: hidden;
+  touch-action: auto;
+}
+}
+
+@media (max-width: 446px) {
+  html, body {
+      height: 100vh;
+      touch-action: auto;
+  }
+}
+ 
+@media (max-width: 768px) {
+  html, body {
+      height: 100vh;
+      touch-action: auto;
+  }
+}
 
 
