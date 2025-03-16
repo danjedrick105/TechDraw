@@ -5,9 +5,10 @@ body {
     background: linear-gradient(to left, #000000, #ff0000cc);
     color: #fff; 
     overscroll-behavior: contain; 
-    overflow-y: auto; 
-    overflow-x: hidden; 
     -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    touch-action: auto;
 }
 
 header {
@@ -77,6 +78,12 @@ footer {
 }
 
 @media (max-width: 360px) {
+    html, body {
+        height: 100vh;
+        touch-action: auto;
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
     .section {
         padding-left: 0.5%;
         padding-right: 0.5%;
@@ -97,6 +104,12 @@ footer {
 }
 
 @media (max-width: 446px) {
+    html, body {
+        height: 100vh;
+        touch-action: auto;
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
     .section {
         padding-left: 1%;
         padding-right: 1%;
@@ -117,6 +130,12 @@ footer {
 }
 
 @media (max-width: 768px) {
+    html, body {
+        height: 100vh;
+        touch-action: auto;
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
     .section {
         padding-left: 4%;
         padding-right: 4%;
