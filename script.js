@@ -237,15 +237,12 @@ clearButton.addEventListener('click', () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 });
 
-document.getElementById("openColorPicker").addEventListener("click", () => {
-    setTimeout(() => {
-        document.getElementById("colorPicker").click();
-    }, 100);  // Small delay to allow click event processing
+openColorPicker.addEventListener("click", () => {
+    colorPicker.focus(); // Use focus instead of click
 });
 
-document.getElementById("colorPicker").addEventListener("input", (e) => {
-    color = e.target.value;
-    document.getElementById("openColorPicker").style.backgroundColor = color;
+openColorPicker.addEventListener("touchstart", () => {
+    colorPicker.focus(); // iOS does not allow programmatic click
 });
 
 shapeSelector.addEventListener('change', (e) => shapeMode = e.target.value);
@@ -260,25 +257,28 @@ function saveCanvas() {
     const tempCanvas = document.createElement("canvas");
     const tempCtx = tempCanvas.getContext("2d");
 
-    // Set the same size as the original canvas
     tempCanvas.width = canvas.width;
     tempCanvas.height = canvas.height;
 
-    // Fill with a white background
-    tempCtx.fillStyle = "#ffffff";  // White background
+    // Fill with white background
+    tempCtx.fillStyle = "#ffffff";
     tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
 
-    // Copy the original drawing onto the new canvas
+    // Copy the original drawing
     tempCtx.drawImage(canvas, 0, 0);
-    tempCanvas.toBlob((blob) => {
-        const filename = document.getElementById("filenameInput").value || "drawing.png";
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }, "image/png");
+
+    // Use toDataURL instead of toBlob
+    const dataURL = tempCanvas.toDataURL("image/png");
+    
+    const filename = filenameInput.value || "drawing.png";
+    const link = document.createElement("a");
+    link.href = dataURL;
+    link.download = filename;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
 document.getElementById("saveButton").addEventListener("click", saveCanvas);
+
