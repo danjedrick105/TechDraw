@@ -21,6 +21,8 @@ let color = '#000000';
 let shapeMode = 'freehand';
 let eraserMode = false;
 let startX, startY, lastX, lastY;
+let scale = 1; // Initial zoom level
+let startDistance = 0;
 
 function resizeCanvas() {
     // Create a temporary canvas to save the current drawing
@@ -102,6 +104,10 @@ canvas.addEventListener("pointerdown", (e) => {
     ctx.beginPath();
     ctx.moveTo(x, y);
     redoStack = [];
+
+    if (e.touches.length === 2) { // Detect two-finger touch
+        startDistance = getDistance(e.touches[0], e.touches[1]);
+    }
 });
 
 canvas.addEventListener("pointermove", (e) => {
@@ -168,6 +174,36 @@ canvas.addEventListener("pointerup", (e) => {
     redrawCanvas();
 }, { passive: false });
 
+function getDistance(touch1, touch2) {
+    let dx = touch1.clientX - touch2.clientX;
+    let dy = touch1.clientY - touch2.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+}
+
+function applyTransform() {
+    canvas.style.transform = `scale(${scale})`;
+    canvas.style.transformOrigin = "center";
+}
+
+canvas.addEventListener("touchstart", (e) => {
+    if (e.touches.length === 2) { // Detect two-finger touch
+        startDistance = getDistance(e.touches[0], e.touches[1]);
+    }
+});
+
+canvas.addEventListener("touchmove", (e) => {
+    if (e.touches.length === 2) { // If two fingers are touching
+        e.preventDefault(); // Prevent default zoom behavior
+        let newDistance = getDistance(e.touches[0], e.touches[1]);
+        let zoomFactor = newDistance / startDistance;
+
+        scale *= zoomFactor;
+        scale = Math.max(0.5, Math.min(scale, 3)); // Limit zoom between 0.5x and 3x
+        applyTransform();
+        startDistance = newDistance; // Update for smooth scaling
+    }
+});
+
 undoButton.addEventListener('click', () => {
     if (historyStack.length > 0) {
         redoStack.push(historyStack.pop());
@@ -188,7 +224,15 @@ clearButton.addEventListener('click', () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 });
 
-colorPicker.addEventListener('input', (e) => color = e.target.value);
+document.getElementById("openColorPicker").addEventListener("click", () => {
+    document.getElementById("colorPicker").click(); // Triggers color picker
+});
+
+document.getElementById("colorPicker").addEventListener("input", (e) => {
+    color = e.target.value;
+    document.getElementById("openColorPicker").style.backgroundColor = color;
+});
+
 shapeSelector.addEventListener('change', (e) => shapeMode = e.target.value);
 
 eraserButton.addEventListener('click', () => {
