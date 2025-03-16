@@ -260,25 +260,52 @@ function saveCanvas() {
     tempCanvas.width = canvas.width;
     tempCanvas.height = canvas.height;
 
-    // Fill with white background
+    // Fill background with white
     tempCtx.fillStyle = "#ffffff";
     tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
 
-    // Copy the original drawing
+    // Copy the original drawing onto the new canvas
     tempCtx.drawImage(canvas, 0, 0);
 
-    // Use toDataURL instead of toBlob
-    const dataURL = tempCanvas.toDataURL("image/png");
-    
-    const filename = filenameInput.value || "drawing.png";
-    const link = document.createElement("a");
-    link.href = dataURL;
-    link.download = filename;
+    tempCanvas.toBlob((blob) => {
+        const filename = filenameInput.value || "drawing.png";
+        const url = URL.createObjectURL(blob);
 
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+        // **Solution for Android Chrome**
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = filename;
+
+        // **Check if it's an Android device**
+        if (/Android/i.test(navigator.userAgent)) {
+            try {
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            } catch (error) {
+                console.error("Android save issue: ", error);
+                alert("Saving failed. Try long-pressing the image after opening it.");
+                
+                // Open in new tab as a fallback
+                const newTab = window.open();
+                newTab.document.body.innerHTML = `<img src="${url}" style="width:100%;">`;
+            }
+        } else {
+            // Normal download for desktop and iOS
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Clean up memory
+        URL.revokeObjectURL(url);
+    }, "image/png");
 }
 
 document.getElementById("saveButton").addEventListener("click", saveCanvas);
+
 
