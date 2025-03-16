@@ -95,6 +95,8 @@ canvas.addEventListener('pointerdown', (e) => {
 
 canvas.addEventListener('pointermove', (e) => {
     if (!drawing) return;
+    e.preventDefault();
+    e.stopPropagation();
     const { x, y } = getPosition(e);
 
     ctx.strokeStyle = color;
@@ -128,7 +130,10 @@ canvas.addEventListener('pointermove', (e) => {
     }
     lastX = x;
     lastY = y;
-});
+    
+}, {passive:false});
+
+
 
 canvas.addEventListener('pointerup', (e) => {
     drawing = false;
