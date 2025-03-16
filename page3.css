@@ -1,19 +1,18 @@
 canvas {
-  cursor: crosshair;
-  margin: auto;
-  margin-bottom: 40px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-wrap: wrap;
+  display: block;
+  max-width: 100%;
+  width: 90vw; /* 90% of the viewport width */
+  height: auto;
   border: black solid 3px;
   background-color: #ffffff;
   touch-action: auto; 
   user-select: none; 
-} 
+}
 
 .controls {
   text-align: center;
   align-items: center;
+  justify-content: center;
   margin: auto;
   padding: 0;
   gap: 10px;
@@ -34,7 +33,6 @@ button, input [type="color"] {
   border: none;
   border-radius: 7px;
   transition: background-color 0.5s;
-  touch-action: none; 
   user-select: none; 
 } 
 
@@ -53,5 +51,6 @@ margin-bottom: 10px;
 button:hover,input[type="color"]:hover {
 background-color: #fa7b7b;
 }
+
 
 
