@@ -23,21 +23,29 @@ let eraserMode = false;
 let startX, startY, lastX, lastY;
 
 function resizeCanvas() {
+    // Create a temporary canvas to save the current drawing
     const tempCanvas = document.createElement('canvas');
     tempCanvas.width = canvas.width;
     tempCanvas.height = canvas.height;
     const tempCtx = tempCanvas.getContext('2d');
     tempCtx.drawImage(canvas, 0, 0);
 
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-
+    // Resize the actual canvas
     canvas.width = window.innerWidth * 0.9;
     canvas.height = window.innerHeight * 0.7;
 
+    // Restore the drawing
     ctx.drawImage(tempCanvas, 0, 0);
-    redrawCanvas();
+
+    // Ensure redrawCanvas exists before calling it
+    if (typeof redrawCanvas === "function") {
+        redrawCanvas();
+    }
 }
+
+// Attach event listeners outside of the function
+window.addEventListener("load", resizeCanvas);
+window.addEventListener("resize", resizeCanvas);
 
 
 function getPosition(e) {
@@ -130,7 +138,6 @@ canvas.addEventListener('pointermove', (e) => {
     }
     lastX = x;
     lastY = y;
-    
 }, {passive:false});
 
 
@@ -211,10 +218,27 @@ eraserButton.addEventListener('click', () => {
 });
 penSizeSlider.addEventListener('input', (e) => penSizeValue.textContent = e.target.value);
 
-saveButton.addEventListener('click', () => {
-    const filename = filenameInput.value || 'drawing';
-    const link = document.createElement('a');
-    link.download = `${filename}.png`;
-    link.href = canvas.toDataURL();
+function saveCanvas() {
+    const tempCanvas = document.createElement("canvas");
+    const tempCtx = tempCanvas.getContext("2d");
+
+    // Set the same size as the original canvas
+    tempCanvas.width = canvas.width;
+    tempCanvas.height = canvas.height;
+
+    // Fill with a white background
+    tempCtx.fillStyle = "#ffffff";  // White background
+    tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+    // Copy the original drawing onto the new canvas
+    tempCtx.drawImage(canvas, 0, 0);
+
+    // Convert to image and download
+    const filename = document.getElementById("filenameInput").value || "drawing";
+    const link = document.createElement("a");
+    link.download = filename + ".png";
+    link.href = tempCanvas.toDataURL("image/png");
     link.click();
-});
+}
+
+document.getElementById("saveButton").addEventListener("click", saveCanvas);
