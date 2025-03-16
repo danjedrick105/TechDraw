@@ -174,6 +174,19 @@ canvas.addEventListener("pointerup", (e) => {
     redrawCanvas();
 }, { passive: false });
 
+function triggerColorPicker() {
+    setTimeout(() => {
+        colorPicker.click();
+    }, 100);
+}
+openColorPicker.addEventListener("click", triggerColorPicker);
+openColorPicker.addEventListener("touchstart", triggerColorPicker);  // Added for mobile
+
+colorPicker.addEventListener("input", (e) => {
+    color = e.target.value;
+    openColorPicker.style.backgroundColor = color;
+});
+
 function getDistance(touch1, touch2) {
     let dx = touch1.clientX - touch2.clientX;
     let dy = touch1.clientY - touch2.clientY;
@@ -225,7 +238,9 @@ clearButton.addEventListener('click', () => {
 });
 
 document.getElementById("openColorPicker").addEventListener("click", () => {
-    document.getElementById("colorPicker").click(); // Triggers color picker
+    setTimeout(() => {
+        document.getElementById("colorPicker").click();
+    }, 100);  // Small delay to allow click event processing
 });
 
 document.getElementById("colorPicker").addEventListener("input", (e) => {
@@ -255,13 +270,15 @@ function saveCanvas() {
 
     // Copy the original drawing onto the new canvas
     tempCtx.drawImage(canvas, 0, 0);
-
-    // Convert to image and download
-    const filename = document.getElementById("filenameInput").value || "drawing";
-    const link = document.createElement("a");
-    link.download = filename + ".png";
-    link.href = tempCanvas.toDataURL("image/png");
-    link.click();
+    tempCanvas.toBlob((blob) => {
+        const filename = document.getElementById("filenameInput").value || "drawing.png";
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }, "image/png");
 }
 
 document.getElementById("saveButton").addEventListener("click", saveCanvas);
