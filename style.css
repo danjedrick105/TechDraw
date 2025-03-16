@@ -5,7 +5,6 @@ body {
     background: linear-gradient(to left, #000000, #ff0000cc);
     color: #fff; 
     overscroll-behavior: contain; 
-    touch-action: auto;
     overflow-y: auto; 
     overflow-x: hidden; 
     -webkit-overflow-scrolling: touch;
@@ -62,6 +61,21 @@ footer {
     flex-wrap: wrap;     
 }
 
+.scrolling-text {
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    animation: scroll 10s linear infinite;
+}
+@keyframes scroll {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+
 @media (max-width: 360px) {
     .section {
         padding-left: 0.5%;
@@ -77,12 +91,18 @@ footer {
         size: 0.5rem;
         padding: 0.4rem 0.1rem 0.4rem 0.1rem;
     }
+    canvas {
+        padding-left: 0.5%;
+    }
 }
 
 @media (max-width: 446px) {
     .section {
         padding-left: 1%;
         padding-right: 1%;
+    }
+    canvas {
+        padding-left: 0.5%;
     }
     .header {
         padding: 1rem;
@@ -100,6 +120,9 @@ footer {
     .section {
         padding-left: 4%;
         padding-right: 4%;
+    }
+    canvas {
+        padding-left: 0.5%;
     }
     .header, .nav_a {
         size: 1.25rem;
