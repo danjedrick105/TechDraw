@@ -1,13 +1,23 @@
-let lastScrollTop = 0;
-const video = document.querySelector("video");
+const videos = document.querySelectorAll("video");
 
-window.addEventListener("scroll", () => {
-    let scrollTop = window.scrollY || document.documentElement.scrollTop;
+// Track which videos have been manually played
+const playedVideos = new Set();
 
-    if (scrollTop > lastScrollTop) {
-        // Scrolling down, pause the video
-        video.pause();
-    } 
+videos.forEach(video => {
+    // Listen for user-initiated play events
+    video.addEventListener("play", () => {
+        playedVideos.add(video);
+    });
 
-    lastScrollTop = scrollTop;
+    // Observe visibility changes
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) {
+                video.pause(); // Pause when out of view
+            }
+            // Do NOT auto-play when it comes back into view
+        });
+    }, { threshold: 0 });
+
+    observer.observe(video);
 });
