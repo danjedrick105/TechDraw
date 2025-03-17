@@ -1,0 +1,158 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+    font-family: Arial, sans-serif;
+}
+
+main h1 {
+    text-align: center;
+    margin: 15px 0px 15px 0px;
+}
+
+/* Section Styling */
+section {
+    max-width: 90%;
+    margin: auto;
+    padding: 3%;
+    background-color: #ffffff1e;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+/* Container Layout */
+.container {
+    display: grid;
+    grid-template-areas:
+        "description description video"
+        "text1 text2 video";
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    padding: 20px;
+}
+
+/* Description Box */
+.description {
+    grid-area: description;
+    background: linear-gradient(to left, #000, #3e8bff);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 1.2rem;
+    border-radius: 8px;
+}
+
+/* Text Content Boxes */
+.text1, .text2 {
+    background: linear-gradient(to right, #ff0202af, #3e8bff);
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 1rem;
+    border-radius: 8px;
+}
+
+
+/* Video Styling */
+.video {
+    grid-area: video;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.video video {
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+/* Small Video */
+.video-small {
+    text-align: center;
+    margin: 20px 0;
+}
+
+img {
+    float: right;
+    margin: 0px 0px 15px 20px;
+  }
+
+.home {
+    background-color: #ffffff1e;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 5% 10% 5% 10%;
+}
+
+.home h1 {
+    color: #000000;
+    font-size: 1.5rem; /* Instead of 30px */
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.home p {
+    color: #ffffff;
+    font-size: 1.5rem; /* Instead of 30px */
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #222;
+    color: white;
+    margin-top: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .container {
+        grid-template-areas:
+            "description description"
+            "text1 text2"
+            "video video";
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 360px) {
+    .container {
+        grid-template-areas:
+            "description"
+            "video"
+            "text1"
+            "text2";
+        grid-template-columns: 1fr;
+        padding: 15px;
+    }
+
+    section {
+        max-width: 95%;
+        padding: 5px;
+        font-size: 1.5rem;
+    }
+    .home h1 {
+        padding-left: 1.5%;
+        padding-right: 1.5%;
+    }
+}
+
+@media (max-width: 446px) {
+    .container {
+        gap: 10px;
+    }
+
+    .description,
+    .text1,
+    .text2 {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+}
