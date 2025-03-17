@@ -38,7 +38,7 @@ section {
 /* Description Box */
 .description {
     grid-area: description;
-    background-color: rgb(30, 29, 43);
+    background-color: #131212;
     color: white;
     padding: 20px;
     text-align: center;
@@ -46,9 +46,9 @@ section {
     border-radius: 8px;
 }
 
-/* Text Content Boxes */
+
 .text1, .text2 {
-    background-color: rgb(30, 29, 43);
+    background-color: #131212;
     color: white;
     padding: 15px;
     text-align: center;
@@ -56,8 +56,6 @@ section {
     border-radius: 8px;
 }
 
-
-/* Video Styling */
 .video {
     grid-area: video;
     display: flex;
@@ -71,7 +69,6 @@ section {
     border-radius: 8px;
 }
 
-/* Small Video */
 .video-small {
     text-align: center;
     margin: 20px 0;
@@ -90,19 +87,19 @@ img {
 
 .home h1 {
     color: #000000;
-    font-size: 1.5rem; /* Instead of 30px */
+    font-size: 1.5rem; 
     padding-left: 10%;
     padding-right: 10%;
 }
 
 .home p {
     color: #ffffff;
-    font-size: 1.5rem; /* Instead of 30px */
+    font-size: 1.5rem; 
     padding-left: 10%;
     padding-right: 10%;
 }
 
-/* Footer */
+
 footer {
     text-align: center;
     padding: 15px;
@@ -111,7 +108,7 @@ footer {
     margin-top: 20px;
 }
 
-/* Responsive Design */
+
 @media (max-width: 1024px) {
     .container {
         grid-template-areas:

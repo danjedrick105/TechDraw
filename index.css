@@ -25,6 +25,12 @@ section img {
     padding: 17px;
 }
 
+.gallery:hover {
+    background-color: #131212;
+    transition: background-color 0.4s ease;
+    clip-path: circle(50%);
+}
+
 .grid-container {
     padding: 5%;
     display: grid;
@@ -44,7 +50,7 @@ section img {
   }
 
   .grid-item:hover {
-    background-color: #9b3030;
+    background-color: #131212;
     transition: background-color 0.4s ease;
   }
   .grid-item:hover p {
