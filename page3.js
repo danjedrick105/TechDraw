@@ -52,11 +52,12 @@ window.addEventListener("resize", resizeCanvas);
 
 function getPosition(e) {
     const rect = canvas.getBoundingClientRect();
-    let x = e.clientX - rect.left;
-    let y = e.clientY - rect.top;
+    let x = (e.clientX - rect.left) / scale;
+    let y = (e.clientY - rect.top) / scale;
+    
     if (e.touches && e.touches.length > 0) {
-        x = e.touches[0].clientX - rect.left;
-        y = e.touches[0].clientY - rect.top;
+        x = (e.touches[0].clientX - rect.left) / scale;
+        y = (e.touches[0].clientY - rect.top) / scale;
     }
     return { x, y };
 }
