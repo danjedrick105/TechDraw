@@ -23,6 +23,7 @@ let eraserMode = false;
 let startX, startY, lastX, lastY;
 let scale = 1; 
 let startDistance = 0;
+let offsetX = 0, offsetY = 0;
 
 function resizeCanvas() {
 
@@ -36,8 +37,7 @@ function resizeCanvas() {
     canvas.width = window.innerWidth * 0.9;
     canvas.height = window.innerHeight * 0.7;
 
-    ctx.scale(scaleX, scaleY); 
-    ctx.putImageData(tempImage, 0, 0);
+    ctx.drawImage(tempCanvas, 0, 0);
 
     if (typeof redrawCanvas === "function") {
         redrawCanvas();
@@ -54,8 +54,8 @@ function getPosition(e) {
     let y = (e.clientY - rect.top) / scale;
     
     if (e.touches && e.touches.length > 0) {
-        x = (e.touches[0].clientX - rect.left) / scale;
-        y = (e.touches[0].clientY - rect.top) / scale;
+        x = (e.touches[0].clientX - rect.left - offsetX) / scale;
+        y = (e.touches[0].clientY - rect.top - offsetY) / scale;
     }
     return { x, y };
 }
@@ -64,7 +64,7 @@ function redrawCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     historyStack.forEach(item => {
         ctx.strokeStyle = item.color;
-        ctx.lineWidth = item.size/scale;
+        ctx.lineWidth = item.size / scale;
         ctx.beginPath();
 
         if (item.type === 'freehand' || item.type === 'eraser') {
@@ -116,7 +116,7 @@ canvas.addEventListener("pointermove", (e) => {
 
     const { x, y } = getPosition(e);
     ctx.strokeStyle = color;
-    ctx.lineWidth = penSizeSlider.value/scale;
+    ctx.lineWidth = penSizeSlider.value / scale;
 
     if (eraserMode) {
         ctx.globalCompositeOperation = "destination-out";
