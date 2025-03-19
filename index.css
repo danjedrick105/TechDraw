@@ -20,15 +20,16 @@ section img {
     justify-content: center;
 }
 
+
 .gallery {
     display: grid;
-    padding: 17px;
+    padding: 7px;
 }
 
 .gallery:hover {
-    background-color: #131212;
+    
     transition: background-color 0.4s ease;
-    clip-path: circle(50%);
+    
 }
 
 .grid-container {
