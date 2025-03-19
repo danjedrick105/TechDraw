@@ -32,20 +32,18 @@ function resizeCanvas() {
     const tempCtx = tempCanvas.getContext('2d');
     tempCtx.drawImage(canvas, 0, 0);
 
-    // Resize the actual canvas
+    
     canvas.width = window.innerWidth * 0.9;
     canvas.height = window.innerHeight * 0.7;
 
-    // Restore the drawing
-    ctx.drawImage(tempCanvas, 0, 0);
+    ctx.scale(scaleX, scaleY); 
+    ctx.putImageData(tempImage, 0, 0);
 
-    // Ensure redrawCanvas exists before calling it
     if (typeof redrawCanvas === "function") {
         redrawCanvas();
     }
 }
 
-// Attach event listeners outside of the function
 window.addEventListener("load", resizeCanvas);
 window.addEventListener("resize", resizeCanvas);
 
@@ -66,7 +64,7 @@ function redrawCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     historyStack.forEach(item => {
         ctx.strokeStyle = item.color;
-        ctx.lineWidth = item.size;
+        ctx.lineWidth = item.size/scale;
         ctx.beginPath();
 
         if (item.type === 'freehand' || item.type === 'eraser') {
@@ -95,8 +93,8 @@ function redrawCanvas() {
 
 canvas.addEventListener("pointerdown", (e) => {
     drawing = true;
-    e.preventDefault();  // Stop scrolling
-    e.stopPropagation(); // Stop event from bubbling
+    e.preventDefault();  
+    e.stopPropagation(); 
 
     const { x, y } = getPosition(e);
     startX = x;
@@ -106,7 +104,7 @@ canvas.addEventListener("pointerdown", (e) => {
     ctx.moveTo(x, y);
     redoStack = [];
 
-    if (e.touches.length === 2) { // Detect two-finger touch
+    if (e.touches.length === 2) { 
         startDistance = getDistance(e.touches[0], e.touches[1]);
     }
 });
@@ -118,7 +116,7 @@ canvas.addEventListener("pointermove", (e) => {
 
     const { x, y } = getPosition(e);
     ctx.strokeStyle = color;
-    ctx.lineWidth = penSizeSlider.value;
+    ctx.lineWidth = penSizeSlider.value/scale;
 
     if (eraserMode) {
         ctx.globalCompositeOperation = "destination-out";
@@ -181,7 +179,7 @@ function triggerColorPicker() {
     }, 100);
 }
 openColorPicker.addEventListener("click", triggerColorPicker);
-openColorPicker.addEventListener("touchstart", triggerColorPicker);  // Added for mobile
+openColorPicker.addEventListener("touchstart", triggerColorPicker);  
 
 colorPicker.addEventListener("input", (e) => {
     color = e.target.value;
@@ -200,21 +198,21 @@ function applyTransform() {
 }
 
 canvas.addEventListener("touchstart", (e) => {
-    if (e.touches.length === 2) { // Detect two-finger touch
+    if (e.touches.length === 2) { 
         startDistance = getDistance(e.touches[0], e.touches[1]);
     }
 });
 
 canvas.addEventListener("touchmove", (e) => {
-    if (e.touches.length === 2) { // If two fingers are touching
-        e.preventDefault(); // Prevent default zoom behavior
+    if (e.touches.length === 2) { 
+        e.preventDefault(); 
         let newDistance = getDistance(e.touches[0], e.touches[1]);
         let zoomFactor = newDistance / startDistance;
 
         scale *= zoomFactor;
-        scale = Math.max(0.5, Math.min(scale, 3)); // Limit zoom between 0.5x and 3x
+        scale = Math.max(0.5, Math.min(scale, 5)); 
         applyTransform();
-        startDistance = newDistance; // Update for smooth scaling
+        startDistance = newDistance; 
     }
 });
 
@@ -239,11 +237,11 @@ clearButton.addEventListener('click', () => {
 });
 
 openColorPicker.addEventListener("click", () => {
-    colorPicker.focus(); // Use focus instead of click
+    colorPicker.focus(); 
 });
 
 openColorPicker.addEventListener("touchstart", () => {
-    colorPicker.focus(); // iOS does not allow programmatic click
+    colorPicker.focus();
 });
 
 shapeSelector.addEventListener('change', (e) => shapeMode = e.target.value);
@@ -261,23 +259,23 @@ function saveCanvas() {
     tempCanvas.width = canvas.width;
     tempCanvas.height = canvas.height;
 
-    // Fill background with white
+   
     tempCtx.fillStyle = "#ffffff";
     tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
 
-    // Copy the original drawing onto the new canvas
+    
     tempCtx.drawImage(canvas, 0, 0);
 
     tempCanvas.toBlob((blob) => {
         const filename = filenameInput.value || "drawing.png";
         const url = URL.createObjectURL(blob);
 
-        // **Solution for Android Chrome**
+       
         const link = document.createElement("a");
         link.href = url;
         link.download = filename;
 
-        // **Check if it's an Android device**
+
         if (/Android/i.test(navigator.userAgent)) {
             try {
                 const a = document.createElement('a');
@@ -291,18 +289,18 @@ function saveCanvas() {
                 console.error("Android save issue: ", error);
                 alert("Saving failed. Try long-pressing the image after opening it.");
                 
-                // Open in new tab as a fallback
+                
                 const newTab = window.open();
                 newTab.document.body.innerHTML = `<img src="${url}" style="width:100%;">`;
             }
         } else {
-            // Normal download for desktop and iOS
+           
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         }
 
-        // Clean up memory
+       
         URL.revokeObjectURL(url);
     }, "image/png");
 }
