@@ -74,6 +74,14 @@ function redrawCanvas() {
         } else if (item.type === 'rectangle') {
             ctx.globalCompositeOperation = 'source-over';
             ctx.strokeRect(item.startX, item.startY, item.width, item.height);
+        } else if (item.type === 'triangle') {
+            ctx.globalCompositeOperation = 'source-over';
+            let midX = (item.startX + item.endX) / 2;        
+            ctx.moveTo(midX, item.startY);  // Top vertex
+            ctx.lineTo(item.startX, item.endY);  // Bottom-left vertex
+            ctx.lineTo(item.endX, item.endY);  // Bottom-right vertex
+            ctx.closePath();
+            ctx.stroke();
         } else if (item.type === 'circle') {
             ctx.globalCompositeOperation = 'source-over';
             ctx.arc(item.startX, item.startY, item.radius, 0, Math.PI * 2);
@@ -134,6 +142,16 @@ canvas.addEventListener("pointermove", (e) => {
         ctx.beginPath();
         if (shapeMode === "rectangle") {
             ctx.strokeRect(startX, startY, x - startX, y - startY);
+        } else if (shapeMode === "triangle") {  
+            redrawCanvas();
+            ctx.globalCompositeOperation = "source-over";
+            ctx.beginPath();           
+            let midX = (startX + x) / 2;            
+            ctx.moveTo(midX, startY);  
+            ctx.lineTo(startX, y);  
+            ctx.lineTo(x, y);  
+            ctx.closePath();           
+            ctx.stroke(); 
         } else if (shapeMode === "circle") {
             ctx.arc(startX, startY, Math.hypot(x - startX, y - startY), 0, Math.PI * 2);
             ctx.stroke();
@@ -142,9 +160,9 @@ canvas.addEventListener("pointermove", (e) => {
             ctx.lineTo(x, y);
             ctx.stroke();
         }
-    }
     lastX = x;
     lastY = y;
+    }
 }, { passive: false });
 
 canvas.addEventListener("pointerup", (e) => {
@@ -162,6 +180,8 @@ canvas.addEventListener("pointerup", (e) => {
 
     if (shapeMode === "rectangle") {
         historyStack.push({ type: "rectangle", startX, startY, width: lastX - startX, height: lastY - startY, color, size: penSizeSlider.value });
+    } else if (shapeMode === "triangle") { 
+        historyStack.push({ type: "triangle", startX, startY, endX: lastX, endY: lastY, color, size: penSizeSlider.value });
     } else if (shapeMode === "circle") {
         historyStack.push({ type: "circle", startX, startY, radius: Math.hypot(lastX - startX, lastY - startY), color, size: penSizeSlider.value });
     } else if (shapeMode === "line") {
